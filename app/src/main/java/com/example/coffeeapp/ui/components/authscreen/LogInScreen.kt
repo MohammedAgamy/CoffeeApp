@@ -1,4 +1,4 @@
-package com.example.coffeeapp.ui.components
+package com.example.coffeeapp.ui.components.authscreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -43,12 +43,8 @@ import com.example.coffeeapp.ui.theme.GrayLight
 import com.example.coffeeapp.ui.theme.PrimaryColor
 
 @Composable
-fun SignUpScreen(navHostController:NavHostController){
-
-
+fun LogInScreen(navHostController:NavHostController) {
     var email by remember { mutableStateOf("") }
-    var name by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     Column(
@@ -71,7 +67,7 @@ fun SignUpScreen(navHostController:NavHostController){
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            "Sign up",
+            "Sign in",
             fontFamily = FontFamily(Font(R.font.poppinsmedium)),
             fontSize = 35.sp,
             textAlign = TextAlign.Start,
@@ -80,7 +76,7 @@ fun SignUpScreen(navHostController:NavHostController){
                 .padding(start = 40.dp)
         )
         Text(
-            "Create an account here",
+            "Welcome back",
             fontFamily = FontFamily(Font(R.font.poppinsmedium)),
             fontSize = 18.sp,
             color = Color.LightGray,
@@ -90,80 +86,6 @@ fun SignUpScreen(navHostController:NavHostController){
                 .padding(start = 40.dp)
         )
         Spacer(modifier = Modifier.height(60.dp))
-        TextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text("Name", color = GrayLight) },
-            leadingIcon = { // Icon at the start of the text field
-                Icon(
-                    painter = painterResource(R.drawable.baseline_account_circle_24),
-                    contentDescription = "Phone Icon", tint = PrimaryColor
-                )
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-            ),
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(2.dp)
-                .padding(horizontal = 10.dp)
-                .height(55.dp),
-            colors = TextFieldDefaults.colors(
-                focusedTextColor = PrimaryColor,
-                focusedContainerColor = White,
-                disabledContainerColor = White,
-                unfocusedLabelColor = White,
-                unfocusedContainerColor = White,
-                disabledLabelColor = PrimaryColor,
-                focusedLabelColor = PrimaryColor,
-                focusedIndicatorColor = PrimaryColor,
-                unfocusedIndicatorColor = LightGray,
-                cursorColor = PrimaryColor,
-                unfocusedTextColor = LightGray
-
-
-            )
-
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        TextField(
-            value = phone,
-            onValueChange = { phone = it },
-            label = { Text("Phone", color = GrayLight) },
-            leadingIcon = { // Icon at the start of the text field
-                Icon(
-                    painter = painterResource(R.drawable.baseline_phone_iphone_24),
-                    contentDescription = "Phone Icon", tint = PrimaryColor
-                )
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Phone,
-            ),
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(2.dp)
-                .padding(horizontal = 10.dp)
-                .height(55.dp),
-            colors = TextFieldDefaults.colors(
-                focusedTextColor = PrimaryColor,
-                focusedContainerColor = White,
-                disabledContainerColor = White,
-                unfocusedLabelColor = White,
-                unfocusedContainerColor = White,
-                disabledLabelColor = PrimaryColor,
-                focusedLabelColor = PrimaryColor,
-                focusedIndicatorColor = PrimaryColor,
-                unfocusedIndicatorColor = LightGray,
-                cursorColor = PrimaryColor,
-                unfocusedTextColor = LightGray
-
-
-            )
-
-        )
-        Spacer(modifier = Modifier.height(20.dp))
 
         TextField(
             value = email,
@@ -250,14 +172,14 @@ fun SignUpScreen(navHostController:NavHostController){
 
         Spacer(modifier = Modifier.height(20.dp))
         Text(
-            "By Sign up you agree with our Terms of us ",
+            "Forget Password?",
             color = Black,
             fontFamily = FontFamily(Font(R.font.poppinsmedium)),
-            fontSize = 14.sp,
+            fontSize = 17.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(100.dp))
 
         FloatingActionButton(
             onClick = {
@@ -277,27 +199,27 @@ fun SignUpScreen(navHostController:NavHostController){
                 Modifier.background(PrimaryColor)
             )
         }
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(80.dp))
 
         Row (modifier = Modifier.fillMaxWidth().padding(2.dp).padding(start = 10.dp).clickable {
-            navHostController.navigate("LogInScreen")
+            navHostController.navigate("SignUpScreen")
         }){
             Text(
-                "Already a member?",
+                "New Member?",
                 color = LightGray,
                 fontFamily = FontFamily(Font(R.font.poppinsmedium)),
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center,
 
-                )
+            )
             Text(
-                "Sign ip",
+                "Sign up",
                 color = Black,
                 fontFamily = FontFamily(Font(R.font.poppinsmedium)),
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center,
 
-                )
+            )
         }
 
 

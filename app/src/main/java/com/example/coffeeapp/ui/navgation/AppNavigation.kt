@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.coffeeapp.ui.WelcomeScreen
 import com.example.coffeeapp.ui.components.LogInScreen
+import com.example.coffeeapp.ui.components.SignUpScreen
 
 @Composable
 fun AppNavigation (){
@@ -18,7 +19,8 @@ fun AppNavigation (){
         startDestination = "WelcomeScreen") {
 
         composable("WelcomeScreen") { WelcomeScreen(navController) }
-        composable("LogInScreen") { LogInScreen() }
+        composable("LogInScreen") { LogInScreen(navController) }
+        composable("SignUpScreen") { SignUpScreen(navController) }
 
     }
 }

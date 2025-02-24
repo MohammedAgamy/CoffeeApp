@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-class SignUpViewModel : ViewModel() {
+class AuthViewModel : ViewModel() {
     private val _state = MutableStateFlow<StatesEvent>(StatesEvent.Idle)
     val state: StateFlow<StatesEvent> = _state
 
@@ -28,6 +28,28 @@ class SignUpViewModel : ViewModel() {
                     )
                 }
             }
+
+            is EventIntent.LogInIntent -> {
+                viewModelScope.launch {
+                    logIn(intent.loginModel.email, intent.loginModel.password)
+                }
+            }
+        }
+    }
+
+    private suspend fun logIn(
+        email: String,
+        password: String
+    ) {
+
+        _state.value = StatesEvent.Loading
+        try {
+            auth.signInWithEmailAndPassword(email, password).await()
+            _state.value = StatesEvent.Success("SignIn Successful!")
+
+        } catch (e: Exception) {
+            _state.value = StatesEvent.Error(e.message ?: "Unknown Error")
+
         }
     }
 

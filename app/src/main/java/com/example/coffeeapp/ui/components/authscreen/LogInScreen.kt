@@ -11,13 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,24 +28,69 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.LightGray
-import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.coffeeapp.R
-import com.example.coffeeapp.ui.theme.GrayLight
+import com.example.coffeeapp.data.LoginModel
+import com.example.coffeeapp.data.UserPreferences
+import com.example.coffeeapp.event.intent.EventIntent
+import com.example.coffeeapp.event.states.StatesEvent
+import com.example.coffeeapp.model.AuthViewModel
+import com.example.coffeeapp.ui.components.Custom.CustomTextField
 import com.example.coffeeapp.ui.theme.PrimaryColor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
-fun LogInScreen(navHostController:NavHostController) {
+fun LogInScreen(navHostController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    // 🔹 Track validation errors
+    var emailError by remember { mutableStateOf<String?>(null) }
+    var nameError by remember { mutableStateOf<String?>(null) }
+    var phoneError by remember { mutableStateOf<String?>(null) }
+    var passwordError by remember { mutableStateOf<String?>(null) }
+
+    val viewModel: AuthViewModel = viewModel()
+    val state by viewModel.state.collectAsState()
+
+    val context = LocalContext.current
+    val userPreferences = remember { UserPreferences(context) }
+
+    when (state) {
+        is StatesEvent.Idle -> {}
+        is StatesEvent.Loading -> CircularProgressIndicator()
+        is StatesEvent.Success -> Text(
+            text = (state as StatesEvent.Success).message,
+            color = androidx.compose.ui.graphics.Color.Green
+        )
+
+        is StatesEvent.Error -> Text(
+            text = (state as StatesEvent.Error).error,
+            color = androidx.compose.ui.graphics.Color.Red
+        )
+
+    }
+
+    LaunchedEffect(state) {
+        if (state is StatesEvent.Success) {
+            CoroutineScope(Dispatchers.IO).launch {
+                userPreferences.setLoggedIn(true)  // 🔹 Set user as logged in
+            }
+            navHostController.navigate("Home")
+
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -87,88 +132,20 @@ fun LogInScreen(navHostController:NavHostController) {
         )
         Spacer(modifier = Modifier.height(60.dp))
 
-        TextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email", color = GrayLight) },
-            leadingIcon = { // Icon at the start of the text field
-                Icon(
-                    painter = painterResource(R.drawable.baseline_email_24),
-                    contentDescription = "Phone Icon", tint = PrimaryColor
-                )
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email,
-            ),
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(2.dp)
-                .padding(horizontal = 10.dp)
-                .height(55.dp),
-            colors = TextFieldDefaults.colors(
-                focusedTextColor = PrimaryColor,
-                focusedContainerColor = White,
-                disabledContainerColor = White,
-                unfocusedLabelColor = White,
-                unfocusedContainerColor = White,
-                disabledLabelColor = PrimaryColor,
-                focusedLabelColor = PrimaryColor,
-                focusedIndicatorColor = PrimaryColor,
-                unfocusedIndicatorColor = LightGray,
-                cursorColor = PrimaryColor,
-                unfocusedTextColor = LightGray
-
-
-            )
-
-        )
+        CustomTextField(email, {
+            email = it
+            emailError = if (!android.util.Patterns.EMAIL_ADDRESS.matcher(it)
+                    .matches()
+            ) "Invalid email format" else null
+        }, "Email", emailError, R.drawable.baseline_email_24, KeyboardType.Email)
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        TextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password", color = GrayLight) },
-            leadingIcon = { // Icon at the start of the text field
-                Icon(
-                    painter = painterResource(R.drawable.baseline_lock_outline_24),
-                    contentDescription = "Phone Icon", tint = PrimaryColor
-                )
-            },
-            trailingIcon = {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_remove_red_eye_24),
-                    contentDescription = "Phone Icon", tint = PrimaryColor
-                )
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
-            ),
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(2.dp)
-                .padding(horizontal = 10.dp)
-                .height(55.dp),
-            colors = TextFieldDefaults.colors(
-                focusedTextColor = PrimaryColor,
-                focusedContainerColor = White,
-                disabledContainerColor = White,
-                unfocusedLabelColor = White,
-                unfocusedContainerColor = White,
-                disabledLabelColor = PrimaryColor,
-                focusedLabelColor = PrimaryColor,
-                focusedIndicatorColor = PrimaryColor,
-                unfocusedIndicatorColor = LightGray,
-                cursorColor = PrimaryColor,
-                unfocusedTextColor = LightGray
+        CustomTextField(password, {
+            password = it
+            passwordError = if (it.length < 6) "Password must be at least 6 characters" else null
+        }, "Password", passwordError, R.drawable.baseline_lock_outline_24, KeyboardType.Password)
 
-
-            )
-
-        )
 
         Spacer(modifier = Modifier.height(20.dp))
         Text(
@@ -183,7 +160,14 @@ fun LogInScreen(navHostController:NavHostController) {
 
         FloatingActionButton(
             onClick = {
+                if (nameError == null && phoneError == null && emailError == null && passwordError == null) {
+                    viewModel.sendIntent(
+                        EventIntent.LogInIntent(
+                            LoginModel(email, password)
+                        )
+                    )
 
+                }
             },
             containerColor = PrimaryColor,
             contentColor = Color.White,
@@ -201,9 +185,13 @@ fun LogInScreen(navHostController:NavHostController) {
         }
         Spacer(modifier = Modifier.height(80.dp))
 
-        Row (modifier = Modifier.fillMaxWidth().padding(2.dp).padding(start = 10.dp).clickable {
-            navHostController.navigate("SignUpScreen")
-        }){
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(2.dp)
+            .padding(start = 10.dp)
+            .clickable {
+                navHostController.navigate("SignUpScreen")
+            }) {
             Text(
                 "New Member?",
                 color = LightGray,
@@ -211,7 +199,7 @@ fun LogInScreen(navHostController:NavHostController) {
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center,
 
-            )
+                )
             Text(
                 "Sign up",
                 color = Black,
@@ -219,9 +207,8 @@ fun LogInScreen(navHostController:NavHostController) {
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center,
 
-            )
+                )
         }
-
 
 
     }

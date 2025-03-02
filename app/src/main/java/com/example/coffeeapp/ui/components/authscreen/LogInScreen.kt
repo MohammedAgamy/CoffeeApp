@@ -87,7 +87,7 @@ fun LogInScreen(navHostController: NavHostController) {
             CoroutineScope(Dispatchers.IO).launch {
                 userPreferences.setLoggedIn(true)  // 🔹 Set user as logged in
             }
-            navHostController.navigate("Home")
+            navHostController.navigate("Splash")
 
         }
     }

@@ -98,7 +98,7 @@ fun WelcomeScreen(navHostController: NavHostController) {
             onClick = {
 
                 if (isLoggedIn) {
-                    navHostController.navigate("Home")
+                    navHostController.navigate("Splash")
                 } else {
                     navHostController.navigate("LogInScreen")
 

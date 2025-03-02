@@ -9,6 +9,7 @@ import com.example.coffeeapp.ui.components.Home
 import com.example.coffeeapp.ui.components.welcomescreen.WelcomeScreen
 import com.example.coffeeapp.ui.components.authscreen.LogInScreen
 import com.example.coffeeapp.ui.components.authscreen.SignUpScreen
+import com.example.coffeeapp.ui.components.welcomescreen.SplashScreen
 
 @Composable
 fun AppNavigation (){
@@ -23,6 +24,7 @@ fun AppNavigation (){
         composable("LogInScreen") { LogInScreen(navController) }
         composable("SignUpScreen") { SignUpScreen(navController) }
         composable("Home") { Home() }
+        composable("Splash") { SplashScreen(navController) }
 
     }
 }

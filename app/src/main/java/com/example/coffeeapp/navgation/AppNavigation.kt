@@ -9,6 +9,8 @@ import com.example.coffeeapp.ui.components.Home
 import com.example.coffeeapp.ui.components.welcomescreen.WelcomeScreen
 import com.example.coffeeapp.ui.components.authscreen.LogInScreen
 import com.example.coffeeapp.ui.components.authscreen.SignUpScreen
+import com.example.coffeeapp.ui.components.drinking.Americano
+import com.example.coffeeapp.ui.components.drinking.Cappuccino
 import com.example.coffeeapp.ui.components.welcomescreen.SplashScreen
 
 @Composable
@@ -23,8 +25,12 @@ fun AppNavigation (){
         composable("WelcomeScreen") { WelcomeScreen(navController) }
         composable("LogInScreen") { LogInScreen(navController) }
         composable("SignUpScreen") { SignUpScreen(navController) }
-        composable("Home") { Home() }
+        composable("Home") { Home(navController) }
         composable("Splash") { SplashScreen(navController) }
+        composable("Americano") { Americano() }
+        composable("Cappuccino") { Cappuccino() }
+        composable("Flat") { SplashScreen(navController) }
+        composable("Latte") { SplashScreen(navController) }
 
     }
 }

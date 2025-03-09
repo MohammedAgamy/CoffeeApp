@@ -63,6 +63,8 @@ dependencies {
     implementation(libs.google.firebase.analytics)
     implementation (libs.firebase.auth.ktx)
     //datastore
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation(libs.androidx.datastore.preferences)
+    implementation (libs.androidx.constraintlayout.compose)
+
 
 }
